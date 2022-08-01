@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "559322669477",
+    "project_id": "mercado-capstone",
+    "storage_bucket": "mercado-capstone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559322669477:android:bf03f70bbda3608c91084c",
+        "android_client_info": {
+          "package_name": "com.example.mercad0_capstone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559322669477-i91eobv00bdigvagtpiqntmb138s236f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaqZ_oMwWcJa69BqHh5zEXNw6dfcioTIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559322669477-i91eobv00bdigvagtpiqntmb138s236f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
