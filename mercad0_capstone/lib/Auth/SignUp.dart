@@ -1,72 +1,83 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'main.dart';
-class Login extends StatefulWidget {
-  final VoidCallback onClickedSignUp;
+import 'package:mercad0_capstone/main.dart';
+import 'package:mercad0_capstone/Utilities/Utils.dart';
+class SignUp extends StatefulWidget {
+  final VoidCallback onClickedSignIn;
 
-  const Login({Key? key,required this.onClickedSignUp}) : super(key: key);
+  const SignUp({Key? key,required this.onClickedSignIn}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
+  final formKey = GlobalKey<FormState>();
  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
    @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(10),
-        child: ListView(
+        child: Form(
+          key: formKey,
+          child: ListView(
           children: <Widget>[
             Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),
                 child: const Text(
-                  'Log in',
+                  'Sign Up',
                   style: TextStyle(fontSize: 20),
                 )),
                 Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(10),
                 child: const Text(
-                  'Sign In to your account',
+                  'Register Account',
                   style: TextStyle(fontSize: 15),
                 )),
             Container(
               padding: const EdgeInsets.all(10),
-              child: TextField(
+              child: TextFormField(
                 controller: nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'User Name',
                 ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (email)=>
+                   email != null && ! EmailValidator.validate(email)
+                    ? 'Enter a valid email'
+                    : null,
               ),
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-              child: TextField(
+              child: TextFormField(
                 obscureText: true,
                 controller: passwordController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Password',
                 ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value)=>
+                   value != null && value.length < 6
+                    ? 'Password must be minimum of 6 characters'
+                    : null,
               ),
             ),
-            TextButton(
-              onPressed: () {
-               print("forgot Clicked");
-              },
-              child: const Text('Forgot Password',),
-            ),
+            SizedBox(height: 10,)
+            ,
             Container(
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
-                  child: const Text('Login'),
-                  onPressed: signIn,
+                  child: const Text('Sign Up'),
+                  onPressed: signUp,
                 )
             ),
             Row(
@@ -75,13 +86,13 @@ class _LoginState extends State<Login> {
                 RichText(
                   text: TextSpan(
                     style: TextStyle(color: Colors.black,fontSize: 15),
-                     text: ('Does not have account?  '),
+                     text: ('Already have account?  '),
                      children: [
                     TextSpan(
                       recognizer: TapGestureRecognizer()
-                      ..onTap= widget.onClickedSignUp,
+                      ..onTap= widget.onClickedSignIn,
                       text: 
-                        'Sign Up',
+                        'Log In',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontSize: 20,
@@ -93,20 +104,24 @@ class _LoginState extends State<Login> {
               ],
             ),
           ],
-        ));
+        )));
   }
 
-Future signIn() async{
+Future signUp() async{
+  final isValid = formKey.currentState!.validate();
+  if(!isValid) return;
   showDialog(context: context, 
   barrierDismissible: false,
   builder: (context)=> Center(child: CircularProgressIndicator()));
 try {
-  await FirebaseAuth.instance.signInWithEmailAndPassword(
+  await FirebaseAuth.instance.createUserWithEmailAndPassword(
     email:nameController.text.trim(),
     password: passwordController.text.trim(), 
   );
 } on Exception catch (e) {
  print(e);
+
+ //Utils.showSnackBar(e.message);
 }
 navigatorKey.currentState!.popUntil((route)=>route.isFirst);
 }
