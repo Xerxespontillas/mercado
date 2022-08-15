@@ -8,6 +8,7 @@ class ProductController extends GetxController{
   @override 
   void onInit(){
     products.bindStream(FireStoreDB().getAllProducts());
+    print('passed here!!!!');
     super.onInit();
   }
 

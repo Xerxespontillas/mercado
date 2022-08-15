@@ -12,11 +12,10 @@ class CartScreen extends StatelessWidget {
           title: Text('Basket'),
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CartProducts(),
             CartTotal(),
-             SizedBox(height: 30,),
+            
           ],
         )
        );

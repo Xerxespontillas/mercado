@@ -1,10 +1,8 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product{
    final String name;
- final double price;
+ final int price;
  final String imgUrl;
 
 const Product({required this.name,required this.price,required this.imgUrl});
@@ -12,15 +10,11 @@ const Product({required this.name,required this.price,required this.imgUrl});
 static Product fromSnapshot(DocumentSnapshot snap){
   Product product = 
   Product(
-    imgUrl:snap['imgUrl'] 
-  ,name:snap['name'],
+    imgUrl:snap['imgUrl'],
+    name:snap['name'],
   price:snap['price'],);
   return product;
 }
-
-
-
-
 // static const List<Product> products=[
 //   Product(
 //     name: 'Apple',

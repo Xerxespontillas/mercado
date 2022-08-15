@@ -8,7 +8,7 @@ class ProfilePage extends StatelessWidget {
     final user= FirebaseAuth.instance.currentUser!;
    return  Scaffold(
         appBar: AppBar(
-          title: Text('Mercado'),
+          title: Text('Profile'),
         ),
         body: Padding(padding: EdgeInsets.all(32),
         child: Column(

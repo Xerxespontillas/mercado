@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mercad0_capstone/Controller/cart_controller.dart';
 import 'package:mercad0_capstone/Controller/product_controller.dart';
-import 'package:mercad0_capstone/Models/product_model.dart';
 import 'package:get/get.dart';
 class CatalogProducts extends StatelessWidget {
   final  productController= Get.put(ProductController());
@@ -20,18 +19,18 @@ class CatalogProducts extends StatelessWidget {
 }
 class CatalogProductCard extends StatelessWidget {
   final cartController= Get.put(CartController());
-  final productController=Get.find();
+  final ProductController productController=Get.find();
   final int index;
  CatalogProductCard({Key? key,required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
       child: Row(children: [
-        CircleAvatar(radius:30,backgroundImage: NetworkImage(productController.products[index].imgUrl),
+        CircleAvatar(radius:10,backgroundImage: NetworkImage(productController.products[index].imgUrl),
     ),
-    SizedBox(width: 20,),
+    SizedBox(width: 10,),
     Expanded(child: Text(productController.products[index].name)),
     Expanded(child:Text('${productController.products[index].price}')),
     IconButton(onPressed: () {cartController.addProduct(productController.products[index]);}, icon: Icon(Icons.add_circle))

@@ -10,16 +10,15 @@ class CartTotal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
      ()=> Container(
-        padding: const EdgeInsets.symmetric(horizontal: 75),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Total',style: TextStyle( 
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.bold
             ),),
             Text('₱${controller.total}',style: TextStyle( 
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.bold
             ),)
           ],
