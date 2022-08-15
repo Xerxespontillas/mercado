@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'Auth/ProfilePage.dart';
 import'Auth/AuthPage.dart';
 import 'Screens/home_screen.dart';
-import 'Utilities/Utils.dart';
 import 'package:get/get.dart';
-import 'Screens/Catalog.dart';
+
 Future main() async{
  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -15,6 +13,7 @@ Future main() async{
 }
 final navigatorKey= GlobalKey<NavigatorState>();
  final messengerKey= GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   static const String _title = 'MERCADO';
@@ -43,35 +42,23 @@ body: SafeArea(
     builder:(context, snapshot) {
   
       if(snapshot.connectionState == ConnectionState.waiting)
-  
       {
   
         return Center(child: CircularProgressIndicator());
-  
       }
-  
       else if (snapshot.hasError){
-  
         return Center(child: Text('Something went wrong'));
   
       }
-  
       else if(snapshot.hasData){
-  
      return HomeScreen();
-  
       }
-  
       else {
   
         return AuthPage();
   
       }
-  
-    
-  
   }
-  
   ),
 )
 );

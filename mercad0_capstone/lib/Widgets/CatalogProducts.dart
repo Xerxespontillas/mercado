@@ -1,23 +1,26 @@
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mercad0_capstone/Controller/cart_controller.dart';
+import 'package:mercad0_capstone/Controller/product_controller.dart';
 import 'package:mercad0_capstone/Models/product_model.dart';
 import 'package:get/get.dart';
 class CatalogProducts extends StatelessWidget {
-  const CatalogProducts({Key? key}) : super(key: key);
+  final  productController= Get.put(ProductController());
+   CatalogProducts({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(child: ListView.builder(itemCount:Product.products.length
-    ,itemBuilder: (BuildContext context, int index){
-      return CatalogProductCard(index: index);
-    } ));
+    return Obx(
+      ()=> Flexible(child: ListView.builder(
+        itemCount: productController.products.length,
+        itemBuilder: (BuildContext context, int index){
+        return CatalogProductCard(index: index);
+      } )),
+    );
   }
 }
 class CatalogProductCard extends StatelessWidget {
   final cartController= Get.put(CartController());
+  final productController=Get.find();
   final int index;
  CatalogProductCard({Key? key,required this.index}) : super(key: key);
 
@@ -26,12 +29,12 @@ class CatalogProductCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
       child: Row(children: [
-        CircleAvatar(radius:30,backgroundImage: NetworkImage(Product.products[index].imgUrl),
+        CircleAvatar(radius:30,backgroundImage: NetworkImage(productController.products[index].imgUrl),
     ),
     SizedBox(width: 20,),
-    Expanded(child: Text(Product.products[index].name)),
-    Expanded(child:Text('${Product.products[index].price}')),
-    IconButton(onPressed: () {cartController.addProduct(Product.products[index]);}, icon: Icon(Icons.add_circle))
+    Expanded(child: Text(productController.products[index].name)),
+    Expanded(child:Text('${productController.products[index].price}')),
+    IconButton(onPressed: () {cartController.addProduct(productController.products[index]);}, icon: Icon(Icons.add_circle))
     ]),
     );
   }
