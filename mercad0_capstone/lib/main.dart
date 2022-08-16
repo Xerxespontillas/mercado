@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:splashscreen/splashscreen.dart';
-import'Auth/AuthPage.dart';
-import 'Screens/home_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'Screens/home_screen.dart';
+import'Auth/AuthPage.dart';
+import 'package:splashscreen/splashscreen.dart';
 Future main() async{
  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
