@@ -12,12 +12,18 @@ class CartProducts extends StatelessWidget {
       () => SizedBox(height: 500,child: ListView.builder(
         itemCount: controller.products.length,
       itemBuilder: (BuildContext context, int index) {
-      return CartProductCard(
+       if(controller.products.length == 0) {
+       return  Center(
+        child: Text('No data'));
+       }  
+      else {
+         return CartProductCard(
       controller: controller,
       product: controller.products.keys.toList()[index],
       quantity: controller.products.values.toList()[index],
       index: index,
     );
+      }
       })
       ),
     );
@@ -38,7 +44,7 @@ class CartProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return product == 0 ? Center(child: Text('Empty')) : Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
       child: Row(
         children: [

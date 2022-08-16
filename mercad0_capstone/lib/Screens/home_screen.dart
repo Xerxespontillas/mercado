@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:mercad0_capstone/Widgets/temp_chat_widget.dart';
 import '../Auth/ProfilePage.dart';
 import 'Catalog.dart';
 class HomeScreen extends StatefulWidget {
@@ -14,18 +14,19 @@ class _HomeScreenState extends State<HomeScreen> {
    int _selectedIndex=0;
 static const List<Widget> _pages = <Widget>[
   CatalogScreen(),
+  Chat(),
   Icon(
-    Icons.chat,
+    Icons.settings_outlined,
     size: 150,
   ),
-  ProfilePage()
+  ProfilePage(),
 ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
   body: Center(child: _pages.elementAt(_selectedIndex)),
   bottomNavigationBar: BottomNavigationBar(
-   
+    type: BottomNavigationBarType.fixed,
     currentIndex: _selectedIndex,
     onTap: onItemTapped,
     items: const <BottomNavigationBarItem>[
@@ -36,6 +37,10 @@ static const List<Widget> _pages = <Widget>[
       BottomNavigationBarItem(
         icon: Icon(Icons.chat),
         label: 'Chat',
+      ), 
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings_outlined),
+        label: 'Settings',
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.person),
