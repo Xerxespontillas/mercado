@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mercad0_capstone/Controller/cart_controller.dart';
 import 'package:mercad0_capstone/Controller/product_controller.dart';
@@ -31,8 +33,8 @@ class CatalogProductCard extends StatelessWidget {
         CircleAvatar(radius:40,backgroundImage: NetworkImage(productController.products[index].imgUrl),
     ),
     SizedBox(width: 40,),
-    Expanded(child: Text(productController.products[index].name)),
-    Expanded(child:Text('${productController.products[index].price}')),
+    Expanded(child: Text(productController.products[index].name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+    Expanded(child:Text('₱${productController.products[index].price}')),
     IconButton(onPressed: () {cartController.addProduct(productController.products[index]);}, icon: Icon(Icons.add_circle))
     ]),
     );

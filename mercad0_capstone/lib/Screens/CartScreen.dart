@@ -6,21 +6,20 @@ class CartScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-
+    
    return  Scaffold(
         appBar: AppBar(
           title: Text('Basket'),
         ),
-        body: ListView(
-          children: [
-            CartProducts(),
-            CartTotal(),
-            SizedBox(height: 20,)
-            
-          ],
+        body: Container(
+          child: ListView(
+            children: [
+              CartProducts(),
+              CartTotal(),
+              SizedBox(height: 20,)  
+            ],
+          ),
         )
        );
   }
-
-
 }

@@ -8,9 +8,7 @@ class CatalogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(title: Text("MERCADO"),actions: [
-IconButton(onPressed: 
-
-() => Get.to(()=>CartScreen()) , icon: const Icon(Icons.shopping_cart_checkout),)
+IconButton(onPressed: () => {Get.to(()=>CartScreen())} , icon: const Icon(Icons.shopping_cart_checkout),)
     ],),
     body: SafeArea(
       child: 
