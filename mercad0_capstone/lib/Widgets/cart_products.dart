@@ -9,7 +9,7 @@ class CartProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => SizedBox(height: 600,child: ListView.builder(
+      () => SizedBox(height: 500,child: ListView.builder(
         itemCount: controller.products.length,
       itemBuilder: (BuildContext context, int index) {
       return CartProductCard(

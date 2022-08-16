@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:splashscreen/splashscreen.dart';
 import'Auth/AuthPage.dart';
 import 'Screens/home_screen.dart';
 import 'package:get/get.dart';
@@ -14,15 +16,42 @@ Future main() async{
 final navigatorKey= GlobalKey<NavigatorState>();
  final messengerKey= GlobalKey<ScaffoldMessengerState>();
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   static const String _title = 'MERCADO';
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {  
+  @override  
+  void initState() {  
+    super.initState();  
+    Timer(Duration(seconds: 3),  
+            ()=>Get.to(Entry()) 
+    );  
+  }  
+  @override  
+  Widget build(BuildContext context) {  
+    return SplashScreen(
+        seconds: 8,
+         image: Image.asset('lib/Assets/Mercado_Icon.png'),
+        photoSize: 100.0,        
+        backgroundColor: Colors.white,
+        styleTextUnderTheLoader: new TextStyle(),
+        loaderColor: Colors.green
+      );  
+  }  
+}  
+
+class Entry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       scaffoldMessengerKey: messengerKey,
       navigatorKey: navigatorKey,
-      title: _title,
+      title: MyApp._title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -30,6 +59,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
   class Mainpage extends StatelessWidget{
     @override
