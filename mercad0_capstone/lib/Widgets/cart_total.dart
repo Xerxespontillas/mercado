@@ -14,12 +14,14 @@ class CartTotal extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Total',style: TextStyle( 
-              fontSize: 20,
-              fontWeight: FontWeight.bold
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.black
             ),),
             Text('₱${controller.total}',style: TextStyle( 
-              fontSize: 20,
-              fontWeight: FontWeight.bold
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.black
             ),)
           ],
         ),

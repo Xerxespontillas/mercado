@@ -34,6 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  splashscreen: ^1.3.5
   #Firebase
   cloud_firestore: ^3.4.2
   firebase_auth: ^3.6.1
@@ -67,6 +68,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - lib/Assets/Mercado_Icon.png
   # To add assets to your application, add an assets section, like this
 
   # An image asset can refer to one or more resolution-specific "variants", see
