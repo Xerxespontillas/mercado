@@ -12,7 +12,7 @@ class CartController extends GetxController{
     _products[product] =1;
   }
   Get.snackbar("Product Added", "You have added ${product.name} to the cart",
-  snackPosition: SnackPosition.TOP,duration: Duration(seconds: 2 ));
+  snackPosition: SnackPosition.TOP,duration: Duration(seconds: 1 ));
  }
  
  void removeProduct (Product product){

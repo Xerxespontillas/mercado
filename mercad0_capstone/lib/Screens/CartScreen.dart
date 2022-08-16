@@ -11,10 +11,11 @@ class CartScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Basket'),
         ),
-        body: Column(
+        body: ListView(
           children: [
             CartProducts(),
             CartTotal(),
+            SizedBox(height: 20,)
             
           ],
         )

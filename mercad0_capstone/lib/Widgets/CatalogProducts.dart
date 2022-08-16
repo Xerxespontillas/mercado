@@ -26,11 +26,11 @@ class CatalogProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
       child: Row(children: [
-        CircleAvatar(radius:10,backgroundImage: NetworkImage(productController.products[index].imgUrl),
+        CircleAvatar(radius:40,backgroundImage: NetworkImage(productController.products[index].imgUrl),
     ),
-    SizedBox(width: 10,),
+    SizedBox(width: 40,),
     Expanded(child: Text(productController.products[index].name)),
     Expanded(child:Text('${productController.products[index].price}')),
     IconButton(onPressed: () {cartController.addProduct(productController.products[index]);}, icon: Icon(Icons.add_circle))
