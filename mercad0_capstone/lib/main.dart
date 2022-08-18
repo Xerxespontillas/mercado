@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   @override  
   Widget build(BuildContext context) {  
     return SplashScreen(
-        seconds: 8,
+        seconds: 5,
          image: Image.asset('lib/Assets/Mercado_Icon.png'),
         photoSize: 100.0,        
         backgroundColor: Colors.white,
@@ -72,14 +72,13 @@ body: SafeArea(
   
       if(snapshot.connectionState == ConnectionState.waiting)
       {
-  
         return Center(child: CircularProgressIndicator());
       }
       else if (snapshot.hasError){
         return Center(child: Text('Something went wrong'));
   
       }
-      else if(snapshot.hasData){
+      else if(snapshot.hasData||snapshot.connectionState == ConnectionState.done){
      return HomeScreen();
       }
       else {

@@ -14,6 +14,14 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose(){
+nameController.dispose();
+passwordController.dispose();
+    super.dispose();
+  }
+
    @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,7 +47,7 @@ class _LoginState extends State<Login> {
               child: TextField(
                 controller: nameController,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(12.0)),),
                   labelText: 'User Name',
                 ),
               ),
@@ -50,7 +58,7 @@ class _LoginState extends State<Login> {
                 obscureText: true,
                 controller: passwordController,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(borderRadius:BorderRadius.all(Radius.circular(12.0)),),
                   labelText: 'Password',
                 ),
               ),

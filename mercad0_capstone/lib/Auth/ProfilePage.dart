@@ -18,7 +18,9 @@ class ProfilePage extends StatelessWidget {
             SizedBox(height: 8),
             Text(user.email!),
             SizedBox(height: 40),
-            ElevatedButton.icon(style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(50)), onPressed: ()=> FirebaseAuth.instance.signOut(), icon: Icon(Icons.arrow_back,size: 32,), label: Text("Sign out"))
+            ElevatedButton.icon(style: ElevatedButton.styleFrom(minimumSize: Size.fromHeight(50)), 
+            onPressed: ()=> FirebaseAuth.instance.signOut(), icon: Icon(Icons.arrow_back,size: 32,),
+             label: Text("Sign out"))
           ],
         ),), 
         );
