@@ -14,13 +14,18 @@ class Chat extends StatelessWidget {
           children: <Widget>[
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(left: 16,right: 16,top: 10),
+                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("Recent Chats",style: TextStyle(fontSize: 32,fontWeight: FontWeight.bold),),
+                    Text(
+                      "Recent Chats",
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    ),
                     Container(
-                      padding: EdgeInsets.only(left: 8,right: 8,top: 2,bottom: 2),
+                      padding:
+                          EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
                       height: 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -28,7 +33,9 @@ class Chat extends StatelessWidget {
                       child: Row(
                         children: <Widget>[
                           Icon(Icons.search),
-                          SizedBox(width: 2,),
+                          SizedBox(
+                            width: 2,
+                          ),
                         ],
                       ),
                     ),
@@ -37,25 +44,26 @@ class Chat extends StatelessWidget {
               ),
             ),
             Padding(
-  padding: EdgeInsets.only(top: 16,left: 16,right: 16),
-  child: TextField(
-    decoration: InputDecoration(
-      hintText: "Search...",
-      hintStyle: TextStyle(color: Colors.grey.shade600),
-      prefixIcon: Icon(Icons.search,color: Colors.grey.shade600, size: 20,),
-      filled: true,
-      fillColor: Colors.grey.shade100,
-      contentPadding: EdgeInsets.all(8),
-      enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-              color: Colors.grey.shade100
-          )
-      ),
-    ),
-  ),
-),
-ChatPage()
+              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search...",
+                  hintStyle: TextStyle(color: Colors.grey.shade600),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey.shade600,
+                    size: 20,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                  contentPadding: EdgeInsets.all(8),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.grey.shade100)),
+                ),
+              ),
+            ),
+            ChatPage()
           ],
         ),
       ),
