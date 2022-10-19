@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mercad0_capstone/main.dart';
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
+import 'package:email_validator/email_validator.dart';
 
 //import 'package:mercad0_capstone/Utilities/Utils.dart';
 class SignUp extends StatefulWidget {
@@ -20,9 +20,6 @@ class _SignUpState extends State<SignUp> {
   final formKey = GlobalKey<FormState>();
   final UserNameController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-  final addressController = TextEditingController();
-  final phoneNumberController = TextEditingController();
   final fullNameController = TextEditingController();
   final orgController = TextEditingController();
   var roleController;
@@ -32,9 +29,6 @@ class _SignUpState extends State<SignUp> {
   void dispose() {
     UserNameController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
-    addressController.dispose();
-    phoneNumberController.dispose();
     fullNameController.dispose();
     orgController.dispose();
     super.dispose();
@@ -64,7 +58,8 @@ class _SignUpState extends State<SignUp> {
                       style: TextStyle(fontSize: 15),
                     )),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    alignment: Alignment.centerLeft,
+                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextFormField(
                     obscureText: false,
                     controller: fullNameController,
@@ -76,32 +71,8 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: TextFormField(
-                    obscureText: false,
-                    controller: addressController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      labelText: 'Address',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: TextFormField(
-                    obscureText: false,
-                    controller: phoneNumberController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      labelText: 'Phone Number',
-                    ),
-                  ),
-                ),
+              
+               
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
@@ -138,23 +109,6 @@ class _SignUpState extends State<SignUp> {
                 ),
                 SizedBox(
                   height: 10,
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: TextFormField(
-                    obscureText: true,
-                    controller: confirmPasswordController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      ),
-                      labelText: 'Confirm Password',
-                    ),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) => value != null && value.length < 6
-                        ? 'Password must be minimum of 6 characters'
-                        : null,
-                  ),
                 ),
                 SizedBox(
                   height: 20,
@@ -223,30 +177,21 @@ class _SignUpState extends State<SignUp> {
         context: context,
         barrierDismissible: false,
         builder: (context) => Center(child: CircularProgressIndicator()));
-    if (passWordConfirmed()) {
-      try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: UserNameController.text.trim(),
           password: passwordController.text.trim(),
         );
-      } on Exception catch (e) {
-        print(e);
-        //Utils.showSnackBar(e.message);
-      }
 // add details
       adduserDetails(
         fullNameController.text.trim(),
-        addressController.text.trim(),
         roleController,
-        int.parse(phoneNumberController.text.trim()),
         orgController.text.trim(),
       );
-    }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
-  Future adduserDetails(String fullName, String address, String role,
-      int phoneNumber, String org) async {
+  Future adduserDetails(String fullName, String role,
+     String org) async {
     String roleVal;
     if (_value == 1) {
       roleVal = 'customer';
@@ -263,21 +208,11 @@ class _SignUpState extends State<SignUp> {
     }
     await FirebaseFirestore.instance.collection('users').add({
       'full name': fullName,
-      'address': address,
-      'phone number': phoneNumber,
       'role': role,
       'organization': org,
     });
   }
 
-  bool passWordConfirmed() {
-    if (passwordController.text.trim() ==
-        confirmPasswordController.text.trim()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   Widget myRadioButton(TextEditingController roleController) {
     return Row(
