@@ -5,10 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mercad0_capstone/Screens/CartScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-import 'package:mercad0_capstone/Screens/catalog_screen.dart';
-
-import '../Widgets/CatalogProducts.dart';
+import 'package:mercad0_capstone/Widgets/CatalogProducts.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({Key? key}) : super(key: key);
@@ -24,34 +21,36 @@ class _CatalogScreenState extends State<CatalogScreen> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> _addProductToFirebase() async {
-  try {
-    final String imageName = DateTime.now().toString();
-    final Reference ref = FirebaseStorage.instance.ref().child('images/$imageName.jpg');
-    final UploadTask uploadTask = ref.putFile(File(_imageController.text));
-    final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() => null)!);
-    final String url = await downloadUrl.ref.getDownloadURL();
+    try {
+      final String imageName = DateTime.now().toString();
+      final Reference ref =
+          FirebaseStorage.instance.ref().child('images/$imageName');
+      final UploadTask uploadTask = ref.putFile(File(_imageController.text));
+      final TaskSnapshot downloadUrl =
+          await uploadTask.whenComplete(() => null)!;
+      final String url = await downloadUrl.ref.getDownloadURL();
 
-    final DocumentReference docRef =
-        FirebaseFirestore.instance.collection('products').doc();
+      final DocumentReference docRef =
+          FirebaseFirestore.instance.collection('products').doc();
 
-    await docRef.set({
-      'name': _nameController.text,
-      'description': _descriptionController.text,
-      'price': int.parse(_priceController.text),
-      'address': _addressController.text,
-      'quantity': int.parse(_quantityController.text),
-      'imageRef': ref.fullPath, // save the reference to the uploaded image
-    });
+      await docRef.set({
+        'name': _nameController.text,
+        'description': _descriptionController.text,
+        'price': int.parse(_priceController.text),
+        'address': _addressController.text,
+        'quantity': int.parse(_quantityController.text),
+        'imageRef': ref.fullPath, // save the reference to the uploaded image
+      });
 
-    Get.snackbar('Success', 'Product added successfully');
-  } catch (e) {
-    Get.snackbar('Error', e.toString());
-    print(e);
+      Get.snackbar('Success', 'Product added successfully');
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      print(e);
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +73,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final ImagePicker _picker = ImagePicker();
           final XFile? image =
               await _picker.pickImage(source: ImageSource.gallery);
           if (image != null) {
@@ -126,30 +124,32 @@ class _CatalogScreenState extends State<CatalogScreen> {
                             children: [
                               Center(
                                 child: Image.file(
-                                  File(image.path),
+                                  File(_imageController.text),
                                   height: 150,
                                   width: 150,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    final newImage = await _picker.pickImage(
-                                        source: ImageSource.gallery);
+                                child: InkWell(
+                                  onTap: () async {
+                                    final XFile? newImage = await _picker
+                                        .pickImage(source: ImageSource.gallery);
                                     if (newImage != null) {
                                       setState(() {
                                         _imageController.text = newImage.path;
                                       });
                                     }
                                   },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.blue,
+                                    size: 30,
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -160,14 +160,39 @@ class _CatalogScreenState extends State<CatalogScreen> {
                     TextButton(
                       child: Text('Cancel'),
                       onPressed: () {
+                        setState(() {
+                          _nameController.clear();
+                          _descriptionController.clear();
+                          _priceController.clear();
+                          _addressController.clear();
+                          _quantityController.clear();
+                          _imageController.clear();
+                        });
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('Add'),
-                      onPressed: () {
+                      child: Text('Save'),
+                      onPressed: () async {
+                        if (_nameController.text.isEmpty ||
+                            _descriptionController.text.isEmpty ||
+                            _priceController.text.isEmpty ||
+                            _addressController.text.isEmpty ||
+                            _quantityController.text.isEmpty ||
+                            _imageController.text.isEmpty) {
+                          Get.snackbar('Error', 'Please fill all fields');
+                          return;
+                        }
+                        await _addProductToFirebase();
+                        setState(() {
+                          _nameController.clear();
+                          _descriptionController.clear();
+                          _priceController.clear();
+                          _addressController.clear();
+                          _quantityController.clear();
+                          _imageController.clear();
+                        });
                         Navigator.of(context).pop();
-                        _addProductToFirebase();
                       },
                     ),
                   ],
@@ -178,7 +203,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
             Get.snackbar('Error', 'No image selected');
           }
         },
-        child: Icon(Icons.add),
+        tooltip: 'Add Product',
+        child: const Icon(Icons.add),
       ),
     );
   }
