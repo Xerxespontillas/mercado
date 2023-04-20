@@ -171,48 +171,60 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future signUp() async {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) return;
+  final isValid = formKey.currentState!.validate();
+  if (!isValid) return;
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          Center(child: CircularProgressIndicator()));
+  try {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: UserNameController.text.trim(),
+      password: passwordController.text.trim(),
+    ).timeout(Duration(seconds: 10)); // set a timeout value of 10 seconds
+    // set the value of roleController based on the selected radio button
+    if (_value == 1) {
+      roleController = 'customer';
+    } else if (_value == 2) {
+      roleController = 'farmer';
+    }
+    // add details
+    adduserDetails(
+      fullNameController.text.trim(),
+      roleController,
+      orgController.text.trim(),
+    );
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  } catch (e) {
+    // handle the error
+    print('Error: $e');
     showDialog(
         context: context,
-        barrierDismissible: false,
-        builder: (context) => Center(child: CircularProgressIndicator()));
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: UserNameController.text.trim(),
-          password: passwordController.text.trim(),
-        );
-// add details
-      adduserDetails(
-        fullNameController.text.trim(),
-        roleController,
-        orgController.text.trim(),
-      );
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+        builder: (context) => AlertDialog(
+              title: Text('Error'),
+              content: Text('The database took too long to respond.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('OK'),
+                ),
+              ],
+            ));
   }
+}
 
-  Future adduserDetails(String fullName, String role,
-     String org) async {
-    String roleVal;
-    if (_value == 1) {
-      roleVal = 'customer';
-      roleController = roleVal;
-      role = roleController;
-    } else if (_value == 2) {
-      roleVal = 'farmer';
-      roleController = roleVal;
-      role = roleController;
-    } else if (_value == 3) {
-      roleVal = 'organization';
-      roleController = roleVal;
-      role = roleController;
-    }
-    await FirebaseFirestore.instance.collection('users').add({
-      'full name': fullName,
-      'role': role,
-      'organization': org,
-    });
-  }
-
+Future<void> adduserDetails(String fullName, String role, String org) async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    Map<String, dynamic> userData = {
+      "fullName": fullName,
+      "role": role,
+      "organization": org,
+      "email": FirebaseAuth.instance.currentUser!.email,
+      "uid": uid
+    };
+    FirebaseFirestore.instance.collection('users').doc(uid).set(userData);
+}
 
   Widget myRadioButton(TextEditingController roleController) {
     return Row(

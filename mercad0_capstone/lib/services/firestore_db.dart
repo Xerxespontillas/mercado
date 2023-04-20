@@ -10,7 +10,11 @@ class FireStoreDB {
         .collection('products')
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) => Product.fromSnapshot(doc)).toList();
+      return snapshot.docs
+          .map((doc) => Product.fromSnapshot(doc))
+          .toList()
+          .cast<Product>();
     });
   }
 }
+

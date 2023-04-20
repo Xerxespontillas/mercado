@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mercad0_capstone/Widgets/temp_chat_widget.dart';
 import '../Auth/ProfilePage.dart';
-import 'Catalog.dart';
+import 'package:mercad0_capstone/Screens/catalog_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   static const List<Widget> _pages = <Widget>[
-    CatalogScreen(),
+     CatalogScreen(),
     Chat(),
     Icon(
       Icons.settings_outlined,
