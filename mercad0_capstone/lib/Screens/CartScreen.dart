@@ -10,22 +10,36 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Basket'),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        elevation: 0,
       ),
-      body: ListView(
+      body: Column(
         children: [
-          Column(
-            children: [
-              CartProducts(),
-              CartTotal(),
-              ElevatedButton(
-                  onPressed: () {
-                    print('Bought');
-                  },
-                  child: Text(
-                    'BUY',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  )),
-            ],
+          Expanded(
+            child: CartProducts(),
+          ),
+          Divider(
+            height: 2,
+            color: Colors.grey[300],
+          ),
+          CartTotal(),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              print('Bought');
+            },
+            child: Text(
+              'BUY',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
           ),
         ],
       ),

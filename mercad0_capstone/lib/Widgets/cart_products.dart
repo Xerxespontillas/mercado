@@ -4,9 +4,16 @@ import 'package:get/get.dart';
 import 'package:mercad0_capstone/Models/product_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class CartProducts extends StatelessWidget {
-  final CartController controller = Get.find();
+class CartProducts extends StatefulWidget {
+
   CartProducts({Key? key}) : super(key: key);
+
+  @override
+  State<CartProducts> createState() => _CartProductsState();
+}
+
+class _CartProductsState extends State<CartProducts> {
+  final CartController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {

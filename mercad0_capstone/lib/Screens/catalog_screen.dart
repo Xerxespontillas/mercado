@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,23 +16,47 @@ class CatalogScreen extends StatefulWidget {
 }
 
 class _CatalogScreenState extends State<CatalogScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController();
-  final TextEditingController _imageController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
+  final _picker = ImagePicker();
 
-  Future<void> _addProductToFirebase() async {
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _quantityController = TextEditingController();
+  File? _image;
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    _priceController.dispose();
+    _addressController.dispose();
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+    setState(() {});
+  }
+
+ Future<void> _addProductToFirebase() async {
     try {
+      if (_image == null) {
+        Get.snackbar('Error', 'Please select an image');
+        return;
+      }
+
       final String imageName = DateTime.now().toString();
       final Reference ref =
           FirebaseStorage.instance.ref().child('images/$imageName');
-      final UploadTask uploadTask = ref.putFile(File(_imageController.text));
-      final TaskSnapshot downloadUrl =
-          await uploadTask.whenComplete(() => null)!;
-      final String url = await downloadUrl.ref.getDownloadURL();
+      final UploadTask uploadTask = ref.putFile(_image!);
+      final TaskSnapshot snapshot = await uploadTask;
+      final String url = await snapshot.ref.getDownloadURL();
 
       final DocumentReference docRef =
           FirebaseFirestore.instance.collection('products').doc();
@@ -39,10 +64,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
       await docRef.set({
         'name': _nameController.text,
         'description': _descriptionController.text,
-        'price': int.parse(_priceController.text),
+        'price': int.tryParse(_priceController.text) ?? 0,
         'address': _addressController.text,
-        'quantity': int.parse(_quantityController.text),
-        'imageRef': ref.fullPath, // save the reference to the uploaded image
+        'quantity': int.tryParse(_quantityController.text) ?? 0,
+        'imageRef': url, // Update image reference to URL
       });
 
       Get.snackbar('Success', 'Product added successfully');
@@ -51,6 +76,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
       print(e);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,144 +93,120 @@ class _CatalogScreenState extends State<CatalogScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            CatalogProducts(),
+              CatalogProducts(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final XFile? image =
-              await _picker.pickImage(source: ImageSource.gallery);
-          if (image != null) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Add Product'),
-                  content: SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[
-                        TextField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            labelText: 'Name',
-                          ),
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Add Product'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      TextField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          labelText: 'Name',
                         ),
-                        TextField(
-                          controller: _descriptionController,
-                          decoration: InputDecoration(
-                            labelText: 'Description',
-                          ),
+                      ),
+                      TextField(
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          labelText: 'Description',
                         ),
-                        TextField(
-                          controller: _priceController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelText: 'Price',
-                          ),
+                      ),
+                      TextField(
+                        controller: _priceController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Price',
                         ),
-                        TextField(
-                          controller: _addressController,
-                          decoration: InputDecoration(
-                            labelText: 'Address',
-                          ),
+                      ),
+                      TextField(
+                        controller: _addressController,
+                        decoration: InputDecoration(
+                          labelText: 'Address',
                         ),
-                        TextField(
-                          controller: _quantityController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelText: 'Quantity',
-                          ),
+                      ),
+                      TextField(
+                        controller: _quantityController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Quantity',
                         ),
-                        SizedBox(height: 20),
-                        Container(
+                      ),
+                      SizedBox(height: 20),
+                      if (_image != null)
+                        Image.file(
+                          _image!,
                           height: 200,
                           width: 200,
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: Image.file(
-                                  File(_imageController.text),
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: InkWell(
-                                  onTap: () async {
-                                    final XFile? newImage = await _picker
-                                        .pickImage(source: ImageSource.gallery);
-                                    if (newImage != null) {
-                                      setState(() {
-                                        _imageController.text = newImage.path;
-                                      });
-                                    }
-                                  },
-                                  child: Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.blue,
-                                    size: 30,
-                                  ),
-                                ),
+                        ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _selectImage();
+                          });
+                          
+                        },
+                        child: const Text('Select Image'),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      _addressController.clear();
+                      _nameController.clear();
+                      _descriptionController.clear();
+                      _priceController.clear();
+                      _quantityController.clear();
+                      setState(() {
+                        _image = null;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Add'),
+                    onPressed: () async {
+                      if (_nameController.text.isEmpty ||
+                          _descriptionController.text.isEmpty ||
+                          _priceController.text.isEmpty ||
+                          _quantityController.text.isEmpty ||
+                          _addressController.text.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Error'),
+                            content: Text('Please fill all the fields.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text('OK'),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        setState(() {
-                          _nameController.clear();
-                          _descriptionController.clear();
-                          _priceController.clear();
-                          _addressController.clear();
-                          _quantityController.clear();
-                          _imageController.clear();
-                        });
+                        );
+                      } else {
                         Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: Text('Save'),
-                      onPressed: () async {
-                        if (_nameController.text.isEmpty ||
-                            _descriptionController.text.isEmpty ||
-                            _priceController.text.isEmpty ||
-                            _addressController.text.isEmpty ||
-                            _quantityController.text.isEmpty ||
-                            _imageController.text.isEmpty) {
-                          Get.snackbar('Error', 'Please fill all fields');
-                          return;
-                        }
                         await _addProductToFirebase();
-                        setState(() {
-                          _nameController.clear();
-                          _descriptionController.clear();
-                          _priceController.clear();
-                          _addressController.clear();
-                          _quantityController.clear();
-                          _imageController.clear();
-                        });
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          } else {
-            Get.snackbar('Error', 'No image selected');
-          }
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         },
-        tooltip: 'Add Product',
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
     );
   }

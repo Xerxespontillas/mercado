@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mercad0_capstone/Auth/Login.dart';
 import 'package:mercad0_capstone/Auth/ProfilePage.dart';
 import 'package:mercad0_capstone/Farmer%20Screens/farmer_screen.dart';
 import 'package:mercad0_capstone/Organization%20Screens/organization_screen.dart';
@@ -69,6 +70,7 @@ class Entry extends StatelessWidget {
   }
 }
 
+
 class Mainpage extends StatefulWidget {
   @override
   State<Mainpage> createState() => _MainpageState();
@@ -102,8 +104,9 @@ class _MainpageState extends State<Mainpage> {
                             return Farmers();
                           } else if (user['role'] == 'organization') {
                             return Organization();
-                          } else
+                          } else {
                             return ProfilePage();
+                          }
                         } else {
                           return AlertDialog(
                             title: Text('Not authenticated'),
@@ -111,17 +114,22 @@ class _MainpageState extends State<Mainpage> {
                             actions: [
                               TextButton(
                                 child: Text('OK'),
-                                onPressed: () => Navigator.pop(context),
+                               onPressed: () => Get.off(Login(onClickedSignUp: () {  },)),
                               ),
                             ],
                           );
                         }
                       });
                 } else {
-                  // Redirect user to AuthPage
-                  return AuthPage();
-                }
+                  // Check if user is logged out
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Login(onClickedSignUp: () {  },);
+                  }
+                } return Login(onClickedSignUp: () {  },);
+
               }),
         ),
       );
+      
 }
+

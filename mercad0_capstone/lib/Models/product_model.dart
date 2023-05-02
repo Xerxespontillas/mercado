@@ -17,15 +17,23 @@ class Product {
     required this.imagePath,
   });
 
-  static Product fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    return Product(
-      id: snapshot.id,
-      name: data['name'],
-      description: data['description'],
-      address: data['address'],
-      price: data['price'].toDouble(),
-      imagePath: data['imagePath'],
-    );
+ static Product fromSnapshot(DocumentSnapshot snapshot) {
+  Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+  double price = 0.00;
+  try {
+    price = data['price'].toDouble();
+  } catch (e) {
+    // Handle the error here
+    print('Error parsing price: $e');
   }
+  return Product(
+    id: snapshot.id,
+    name: data['name'],
+    description: data['description'],
+    address: data['address'],
+    price: price,
+    imagePath: data['imagePath'],
+  );
+}
+
 }
