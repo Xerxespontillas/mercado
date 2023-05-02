@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:mercad0_capstone/Controller/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:mercad0_capstone/Models/product_model.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class CartProducts extends StatelessWidget {
-  final CartController controller = Get.find();
+class CartProducts extends StatefulWidget {
+
   CartProducts({Key? key}) : super(key: key);
+
+  @override
+  State<CartProducts> createState() => _CartProductsState();
+}
+
+class _CartProductsState extends State<CartProducts> {
+  final CartController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,7 @@ class CartProducts extends StatelessWidget {
   }
 }
 
-class CartProductCard extends StatelessWidget {
+class CartProductCard extends StatefulWidget {
   final CartController controller;
   final Product product;
   final int quantity;
@@ -41,6 +49,29 @@ class CartProductCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CartProductCardState createState() => _CartProductCardState();
+}
+
+class _CartProductCardState extends State<CartProductCard> {
+  late final ImageProvider<Object> _imageProvider;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getImage();
+  }
+
+  Future<void> _getImage() async {
+    final ref = FirebaseStorage.instance.ref().child(widget.product.imagePath);
+    final url = await ref.getDownloadURL();
+    setState(() {
+      _imageProvider = NetworkImage(url);
+      _isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -48,23 +79,23 @@ class CartProductCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: NetworkImage(
-              product.imgUrl,
-            ),
+            child: _isLoading
+                ? CircularProgressIndicator()
+                : Image(image: _imageProvider),
           ),
           SizedBox(
             width: 15,
           ),
-          Expanded(child: Text(product.name)),
+          Expanded(child: Text(widget.product.name)),
           IconButton(
               onPressed: () {
-                controller.removeProduct(product);
+                widget.controller.removeProduct(widget.product);
               },
               icon: Icon(Icons.remove_circle)),
-          Text('${quantity}'),
+          Text('${widget.quantity}'),
           IconButton(
               onPressed: () {
-                controller.addProduct(product);
+                widget.controller.addProduct(widget.product);
               },
               icon: Icon(Icons.add_circle)),
         ],

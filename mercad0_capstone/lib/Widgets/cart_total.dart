@@ -4,29 +4,31 @@ import 'package:get/get.dart';
 
 class CartTotal extends StatelessWidget {
   final CartController controller = Get.find();
-  CartTotal({Key? key}) : super(key: key);
+  static const TextStyle _totalTextStyle = TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+
+ CartTotal({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Total',
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+              style: _totalTextStyle,
             ),
+            Spacer(),
             Text(
               '₱${controller.total}',
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            )
+              style: _totalTextStyle,
+            ),
           ],
         ),
       ),
