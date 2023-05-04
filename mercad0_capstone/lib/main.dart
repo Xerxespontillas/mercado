@@ -16,7 +16,11 @@ import 'package:splashscreen/splashscreen.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+<<<<<<< HEAD
   Get.put(CartController());
+=======
+  Get.put(CartController());  
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
   runApp(GetMaterialApp(home: MyApp()));
 }
 
@@ -70,6 +74,7 @@ class Entry extends StatelessWidget {
   }
 }
 
+
 class Mainpage extends StatefulWidget {
   @override
   State<Mainpage> createState() => _MainpageState();
@@ -86,6 +91,7 @@ class _MainpageState extends State<Mainpage> {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Something went wrong'));
+<<<<<<< HEAD
                 } else if (snapshot.data != null)
                 // Check if user is logged out
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -99,4 +105,51 @@ class _MainpageState extends State<Mainpage> {
               }),
         ),
       );
+=======
+                } else if (snapshot.data != null) {
+                  return StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(snapshot.data!.uid)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.hasData) {
+                          final user =
+                              snapshot.data?.data() as Map<String, dynamic>;
+                          if (user["role"] == 'customer') {
+                            return HomeScreen();
+                          } else if (user['role'] == 'farmer') {
+                            return Farmers();
+                          } else if (user['role'] == 'organization') {
+                            return Organization();
+                          } else {
+                            return ProfilePage();
+                          }
+                        } else {
+                          return AlertDialog(
+                            title: Text('Not authenticated'),
+                            content: Text('Please log in to access the app'),
+                            actions: [
+                              TextButton(
+                                child: Text('OK'),
+                               onPressed: () => Get.off(Login(onClickedSignUp: () {  },)),
+                              ),
+                            ],
+                          );
+                        }
+                      });
+                } else {
+                  // Check if user is logged out
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Login(onClickedSignUp: () {  },);
+                  }
+                } return Login(onClickedSignUp: () {  },);
+
+              }),
+        ),
+      );
+      
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
 }
+

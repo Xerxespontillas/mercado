@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+<<<<<<< HEAD
 import 'package:firebase_storage/firebase_storage.dart';
+=======
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
@@ -156,6 +159,7 @@ class _SignUpState extends State<SignUp> {
           padding: const EdgeInsets.all(20.0),
           child: Form(
             key: formKey,
+<<<<<<< HEAD
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -218,6 +222,57 @@ class _SignUpState extends State<SignUp> {
                     }
                     return null;
                   },
+=======
+            child: SingleChildScrollView(
+                child: Column(
+              children: <Widget>[
+                Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.all(10),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(fontSize: 20),
+                    )),
+                Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.all(10),
+                    child: const Text(
+                      'Register Account',
+                      style: TextStyle(fontSize: 15),
+                    )),
+                Container(
+                    alignment: Alignment.centerLeft,
+                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextFormField(
+                    obscureText: false,
+                    controller: fullNameController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      labelText: 'Full Name',
+                    ),
+                  ),
+                ),
+              
+               
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    controller: UserNameController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      ),
+                      labelText: 'User Name',
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (email) =>
+                        email != null && !EmailValidator.validate(email)
+                            ? 'Enter a valid email'
+                            : null,
+                  ),
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
                 ),
                 const SizedBox(height: 10),
                 const Text('Password'),
@@ -236,6 +291,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
+<<<<<<< HEAD
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: signUp,
@@ -244,6 +300,155 @@ class _SignUpState extends State<SignUp> {
                 ),
               ],
             ),
+=======
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(child: myRadioButton(roleController)),
+                Container(
+                  child: _farmerOrgVisible == true
+                      ? Container(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          child: TextFormField(
+                            obscureText: false,
+                            controller: orgController,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0)),
+                              ),
+                              labelText: 'Organization',
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: 20,
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                    height: 50,
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: ElevatedButton(
+                      child: const Text('Sign Up'),
+                      onPressed: signUp,
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                        text: ('Already have account?  '),
+                        children: [
+                          TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = widget.onClickedSignUp,
+                            text: 'Log In',
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 20,
+                                color: Colors.blue),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ))));
+  }
+
+  Future signUp() async {
+  final isValid = formKey.currentState!.validate();
+  if (!isValid) return;
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          Center(child: CircularProgressIndicator()));
+  try {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: UserNameController.text.trim(),
+      password: passwordController.text.trim(),
+    ).timeout(Duration(seconds: 10)); // set a timeout value of 10 seconds
+    // set the value of roleController based on the selected radio button
+    if (_value == 1) {
+      roleController = 'customer';
+    } else if (_value == 2) {
+      roleController = 'farmer';
+    }
+    // add details
+    adduserDetails(
+      fullNameController.text.trim(),
+      roleController,
+      orgController.text.trim(),
+    );
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  } catch (e) {
+    // handle the error
+    print('Error: $e');
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Error'),
+              content: Text('The database took too long to respond.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('OK'),
+                ),
+              ],
+            ));
+  }
+}
+
+Future<void> adduserDetails(String fullName, String role, String org) async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    Map<String, dynamic> userData = {
+      "fullName": fullName,
+      "role": role,
+      "organization": org,
+      "email": FirebaseAuth.instance.currentUser!.email,
+      "uid": uid
+    };
+    FirebaseFirestore.instance.collection('users').doc(uid).set(userData);
+}
+
+  Widget myRadioButton(TextEditingController roleController) {
+    return Row(
+      children: [
+        Row(children: [
+          Radio(
+            value: 1,
+            groupValue: _value,
+            onChanged: (value) {
+              setState(() {
+                _value = value as int;
+                _farmerOrgVisible = false;
+              });
+            },
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Text('Customer'),
+        ]),
+        Row(children: [
+          Radio(
+            value: 2,
+            groupValue: _value,
+            onChanged: (value) {
+              setState(() {
+                _value = value as int;
+                _farmerOrgVisible = true;
+              });
+            },
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
           ),
         ),
       ),

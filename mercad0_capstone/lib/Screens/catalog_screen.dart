@@ -44,7 +44,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
     setState(() {});
   }
 
+<<<<<<< HEAD
   Future<void> _addProductToFirebase() async {
+=======
+ Future<void> _addProductToFirebase() async {
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
     try {
       if (_image == null) {
         Get.snackbar('Error', 'Please select an image');
@@ -56,7 +60,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
           FirebaseStorage.instance.ref().child('images/$imageName');
       final UploadTask uploadTask = ref.putFile(_image!);
       final TaskSnapshot snapshot = await uploadTask;
+<<<<<<< HEAD
       final String url = await snapshot.ref.getDownloadURL(); // get image URL
+=======
+      final String url = await snapshot.ref.getDownloadURL();
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
 
       final DocumentReference docRef =
           FirebaseFirestore.instance.collection('products').doc();
@@ -77,6 +85,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
     }
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +104,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
       body: SafeArea(
         child: Column(
           children: [
+<<<<<<< HEAD
             CatalogProducts(),
+=======
+              CatalogProducts(),
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
           ],
         ),
       ),
@@ -151,6 +167,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
                           setState(() {
                             _selectImage();
                           });
+<<<<<<< HEAD
+=======
+                          
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
                         },
                         child: const Text('Select Image'),
                       ),
