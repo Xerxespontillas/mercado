@@ -48,20 +48,22 @@ class _CatalogProductCardState extends State<CatalogProductCard> {
   void initState() {
     super.initState();
     imageUrl = '';
+   
     FirebaseStorage.instance
         .ref('images/${widget.productController.products[widget.index].imagePath}')
         .getDownloadURL()
         .then((value) {
-      if (value != null) { // check if value is not null
-        setState(() {
-          imageUrl = value;
+          if (value != null) {
+            setState(() {
+              imageUrl = value;
+            });
+          } else {
+            print('Error retrieving image from Firebase Storage: download URL is null');
+          }
+        })
+        .catchError((error) {
+          print('Error retrieving image from Firebase Storage: $error');
         });
-      } else {
-        print('Error retrieving image from Firebase Storage: download URL is null');
-      }
-    }).catchError((error) {
-      print('Error retrieving image from Firebase Storage: $error');
-    });
   }
 
   @override
@@ -79,7 +81,7 @@ class _CatalogProductCardState extends State<CatalogProductCard> {
               shape: BoxShape.circle,
               color: Colors.grey[300],
             ),
-            child: imageUrl != '' // check if imageUrl is not empty
+            child: imageUrl.isNotEmpty // check if imageUrl is not empty
                 ? CachedNetworkImage(
                     imageUrl: imageUrl,
                     placeholder: (context, url) => CircularProgressIndicator(),

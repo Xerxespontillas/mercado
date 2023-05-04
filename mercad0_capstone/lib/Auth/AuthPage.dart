@@ -14,6 +14,6 @@
     @override
     Widget build(BuildContext context) => isLogin
         ? Login(onClickedSignUp: toggle)
-        : SignUp(onClickedSignUp: toggle);
+        : SignUp();
     void toggle() => setState(() => isLogin = !isLogin);
   }
