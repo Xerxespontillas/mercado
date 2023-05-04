@@ -43,6 +43,10 @@ dependencies:
   get: ^4.6.5
   firebase_core: ^2.10.0
   firebase_storage: ^11.1.1
+<<<<<<< HEAD
+  file_picker: ^5.2.11
+=======
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
 
 dev_dependencies:
   flutter_test:

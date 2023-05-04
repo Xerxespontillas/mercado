@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mercad0_capstone/Widgets/temp_chat_widget.dart';
+import 'package:mercad0_capstone/Widgets/Chat.dart';
 import '../Auth/ProfilePage.dart';
 import 'package:mercad0_capstone/Screens/catalog_screen.dart';
 

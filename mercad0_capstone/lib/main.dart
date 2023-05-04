@@ -16,7 +16,11 @@ import 'package:splashscreen/splashscreen.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+<<<<<<< HEAD
+  Get.put(CartController());
+=======
   Get.put(CartController());  
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
   runApp(GetMaterialApp(home: MyApp()));
 }
 
@@ -87,6 +91,21 @@ class _MainpageState extends State<Mainpage> {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Something went wrong'));
+<<<<<<< HEAD
+                } else if (snapshot.data != null)
+                // Check if user is logged out
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Login(
+                    onClickedSignUp: () {},
+                  );
+                }
+                return Login(
+                  onClickedSignUp: () {},
+                );
+              }),
+        ),
+      );
+=======
                 } else if (snapshot.data != null) {
                   return StreamBuilder(
                       stream: FirebaseFirestore.instance
@@ -131,5 +150,6 @@ class _MainpageState extends State<Mainpage> {
         ),
       );
       
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
 }
 

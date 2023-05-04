@@ -48,10 +48,27 @@ class _CatalogProductCardState extends State<CatalogProductCard> {
   void initState() {
     super.initState();
     imageUrl = '';
+<<<<<<< HEAD
+   
+=======
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
     FirebaseStorage.instance
         .ref('images/${widget.productController.products[widget.index].imagePath}')
         .getDownloadURL()
         .then((value) {
+<<<<<<< HEAD
+          if (value != null) {
+            setState(() {
+              imageUrl = value;
+            });
+          } else {
+            print('Error retrieving image from Firebase Storage: download URL is null');
+          }
+        })
+        .catchError((error) {
+          print('Error retrieving image from Firebase Storage: $error');
+        });
+=======
       if (value != null) { // check if value is not null
         setState(() {
           imageUrl = value;
@@ -62,6 +79,7 @@ class _CatalogProductCardState extends State<CatalogProductCard> {
     }).catchError((error) {
       print('Error retrieving image from Firebase Storage: $error');
     });
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
   }
 
   @override
@@ -79,7 +97,11 @@ class _CatalogProductCardState extends State<CatalogProductCard> {
               shape: BoxShape.circle,
               color: Colors.grey[300],
             ),
+<<<<<<< HEAD
+            child: imageUrl.isNotEmpty // check if imageUrl is not empty
+=======
             child: imageUrl != '' // check if imageUrl is not empty
+>>>>>>> 97939cb5d9d661a2235fc986a58da5f2b77ad7b4
                 ? CachedNetworkImage(
                     imageUrl: imageUrl,
                     placeholder: (context, url) => CircularProgressIndicator(),
