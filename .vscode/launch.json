@@ -5,21 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "mercad0_capstone",
-            "cwd": "mercad0_capstone",
+            "name": "mercado",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "mercad0_capstone (profile mode)",
-            "cwd": "mercad0_capstone",
+            "name": "mercado (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "mercad0_capstone (release mode)",
-            "cwd": "mercad0_capstone",
+            "name": "mercado (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
